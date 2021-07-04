@@ -1,0 +1,84 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31313.79
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{8D5C8878-F5B8-420A-951C-D37FF42E2D29}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{7731E6F5-7832-481C-9D93-8F2FDC0792E9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Storage", "Storage", "{BF6C752D-2FC6-4199-BF15-D2D02B398FAD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Transport", "Transport", "{7E3FCB9E-C6C3-43DB-8606-7B857462ECCF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Averia.Chat.ConsoleClient", "Clients\Averia.Chat.ConsoleClient\Averia.Chat.ConsoleClient.csproj", "{3191F712-D956-4896-8D19-6B747BE554D2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Averia.Core.Domain", "Core\Averia.Core.Domain\Averia.Core.Domain.csproj", "{7FB9D637-E68F-448B-AC58-53CD762C7764}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Averia.Core.Domain.Client", "Core\Averia.Core.Domain.Client\Averia.Core.Domain.Client.csproj", "{1F7AB294-BFA9-491C-8E4A-E63FFC9D944C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Averia.Core.Domain.Server", "Core\Averia.Core.Domain.Server\Averia.Core.Domain.Server.csproj", "{3C2E7D94-C3E7-4844-A1EA-5FCCB6C28E49}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Averia.Storage.Entity", "Storage\Averia.Storage.Entity\Averia.Storage.Entity.csproj", "{4748BABB-A250-4B65-8396-59EA5E241A1A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Averia.Transport.Client", "Transport\Averia.Core.Client\Averia.Transport.Client.csproj", "{DC1526A9-4361-47CF-8D6D-B09343DFD0F4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Averia.Transport.Server", "Transport\Averia.Core.Server\Averia.Transport.Server.csproj", "{E30CE017-1CD0-46C7-A6F8-81B99F950CB3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Averia.Chat.Server", "Averia.Chat.Server\Averia.Chat.Server.csproj", "{F8BC6129-1E8D-44B6-A01D-BAE3A520EDED}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3191F712-D956-4896-8D19-6B747BE554D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3191F712-D956-4896-8D19-6B747BE554D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3191F712-D956-4896-8D19-6B747BE554D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3191F712-D956-4896-8D19-6B747BE554D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FB9D637-E68F-448B-AC58-53CD762C7764}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FB9D637-E68F-448B-AC58-53CD762C7764}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FB9D637-E68F-448B-AC58-53CD762C7764}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FB9D637-E68F-448B-AC58-53CD762C7764}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F7AB294-BFA9-491C-8E4A-E63FFC9D944C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F7AB294-BFA9-491C-8E4A-E63FFC9D944C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F7AB294-BFA9-491C-8E4A-E63FFC9D944C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F7AB294-BFA9-491C-8E4A-E63FFC9D944C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C2E7D94-C3E7-4844-A1EA-5FCCB6C28E49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C2E7D94-C3E7-4844-A1EA-5FCCB6C28E49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C2E7D94-C3E7-4844-A1EA-5FCCB6C28E49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C2E7D94-C3E7-4844-A1EA-5FCCB6C28E49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4748BABB-A250-4B65-8396-59EA5E241A1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4748BABB-A250-4B65-8396-59EA5E241A1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4748BABB-A250-4B65-8396-59EA5E241A1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4748BABB-A250-4B65-8396-59EA5E241A1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC1526A9-4361-47CF-8D6D-B09343DFD0F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC1526A9-4361-47CF-8D6D-B09343DFD0F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC1526A9-4361-47CF-8D6D-B09343DFD0F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC1526A9-4361-47CF-8D6D-B09343DFD0F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E30CE017-1CD0-46C7-A6F8-81B99F950CB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E30CE017-1CD0-46C7-A6F8-81B99F950CB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E30CE017-1CD0-46C7-A6F8-81B99F950CB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E30CE017-1CD0-46C7-A6F8-81B99F950CB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8BC6129-1E8D-44B6-A01D-BAE3A520EDED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8BC6129-1E8D-44B6-A01D-BAE3A520EDED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8BC6129-1E8D-44B6-A01D-BAE3A520EDED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8BC6129-1E8D-44B6-A01D-BAE3A520EDED}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3191F712-D956-4896-8D19-6B747BE554D2} = {8D5C8878-F5B8-420A-951C-D37FF42E2D29}
+		{7FB9D637-E68F-448B-AC58-53CD762C7764} = {7731E6F5-7832-481C-9D93-8F2FDC0792E9}
+		{1F7AB294-BFA9-491C-8E4A-E63FFC9D944C} = {7731E6F5-7832-481C-9D93-8F2FDC0792E9}
+		{3C2E7D94-C3E7-4844-A1EA-5FCCB6C28E49} = {7731E6F5-7832-481C-9D93-8F2FDC0792E9}
+		{4748BABB-A250-4B65-8396-59EA5E241A1A} = {BF6C752D-2FC6-4199-BF15-D2D02B398FAD}
+		{DC1526A9-4361-47CF-8D6D-B09343DFD0F4} = {7E3FCB9E-C6C3-43DB-8606-7B857462ECCF}
+		{E30CE017-1CD0-46C7-A6F8-81B99F950CB3} = {7E3FCB9E-C6C3-43DB-8606-7B857462ECCF}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3D2FE3F8-366E-4A75-B33A-14F3957F0FF4}
+	EndGlobalSection
+EndGlobal

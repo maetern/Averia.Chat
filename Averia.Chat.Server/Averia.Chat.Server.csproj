@@ -18,9 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\Averia.Core.Domain.Server\Averia.Core.Domain.Server.csproj" />
-    <ProjectReference Include="..\..\Core\Averia.Core.Domain\Averia.Core.Domain.csproj" />
-    <ProjectReference Include="..\..\Storage\Averia.Storage.Entity\Averia.Storage.Entity.csproj" />
+    <ProjectReference Include="..\Core\Averia.Core.Domain.Server\Averia.Core.Domain.Server.csproj" />
+    <ProjectReference Include="..\Core\Averia.Core.Domain\Averia.Core.Domain.csproj" />
+    <ProjectReference Include="..\Storage\Averia.Storage.Entity\Averia.Storage.Entity.csproj" />
   </ItemGroup>
 
   <ItemGroup>
