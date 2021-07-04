@@ -1,0 +1,2 @@
+vue create vuetestapp
+npm run serve
