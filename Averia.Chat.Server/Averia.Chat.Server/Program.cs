@@ -23,7 +23,9 @@ namespace Averia.Chat.Server
     {
         private static IConfiguration Configuration { get; set; }
 
-        private static TcpChatServer ChatServer { get; set; }
+        private static TcpChatServer TcpChatServer { get; set; }
+
+        private static WsChatServer WsChatServer { get; set; }
 
         private static ICommandDispather CommandDispather { get; set; }
 
@@ -50,9 +52,14 @@ namespace Averia.Chat.Server
             CommandDispather = autofacRoot.Resolve<ICommandDispather>();
 
             Console.WriteLine("Start tcp socket chat server");
-            ChatServer = autofacRoot.Resolve<TcpChatServer>();
-            ChatServer.Start();
+            TcpChatServer = autofacRoot.Resolve<TcpChatServer>();
+            TcpChatServer.Start();
             Console.WriteLine("Tcp socket server started");
+
+            Console.WriteLine("Start ws socket chat server");
+            WsChatServer = autofacRoot.Resolve<WsChatServer>();
+            WsChatServer.Start();
+            Console.WriteLine("Tcp ws server started");
 
             WaitCommand();
         }
@@ -95,6 +102,7 @@ namespace Averia.Chat.Server
         private static void ConfigureTcpChatServer(ContainerBuilder builder)
         {
             builder.RegisterType<TcpChatServer>().SingleInstance();
+            builder.RegisterType<WsChatServer>().SingleInstance();
         }
 
         private static void ConfigureJson()

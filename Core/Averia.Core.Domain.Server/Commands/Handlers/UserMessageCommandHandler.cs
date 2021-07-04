@@ -16,13 +16,16 @@ namespace Averia.Core.Domain.Server.Commands.Handlers
 
     public sealed class UserMessageCommandHandler : ICommandHandler<AddMessage>, ICommandHandler<SendExistingMessages>
     {
+        private readonly WsChatServer wsChatServer;
+
         private readonly TcpChatServer tcpChatServer;
 
         private readonly ChatContext context;
 
-        public UserMessageCommandHandler(TcpChatServer tcpChatServer, ChatContext context)
+        public UserMessageCommandHandler(TcpChatServer tcpChatServer, WsChatServer wsChatServer, ChatContext context)
         {
             this.tcpChatServer = tcpChatServer;
+            this.wsChatServer = wsChatServer;
             this.context = context;
         }
 
@@ -39,11 +42,19 @@ namespace Averia.Core.Domain.Server.Commands.Handlers
                 context.Messages.AddAsync(message).GetAwaiter().GetResult();
                 context.SaveChangesAsync().GetAwaiter().GetResult();
 
-                var tcpSession = tcpChatServer.FindSession(Guid.Parse(user.Session.SessionId))
-                                 ?? throw new NotImplementedException();
-
                 var messages = new Message[] { new Message(message.Author.Name, message.Text, message.Date) };
-                tcpSession.SendAsync(JsonConvert.SerializeObject(new AllMessages(messages)));
+
+                var tcpSession = tcpChatServer.FindSession(Guid.Parse(user.Session.SessionId));
+                if (tcpSession != null)
+                    tcpSession.SendAsync(JsonConvert.SerializeObject(new AllMessages(messages)));
+                else
+                {
+                    var wsSession = wsChatServer.FindSession(Guid.Parse(user.Session.SessionId));
+                    ((WsChatSession)wsSession).SendText(
+                        JsonConvert.SerializeObject(
+                            new AllMessages(messages),
+                            new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto }));
+                }
             }
         }
 
@@ -54,16 +65,28 @@ namespace Averia.Core.Domain.Server.Commands.Handlers
 
             if (findUser != null)
             {
-                var tcpSession = tcpChatServer.FindSession(Guid.Parse(findUser.Session.SessionId))
-                                 ?? throw new NullReferenceException();
-
                 var messagesDb = context.Messages.Where(w => w.Recepient.Name == findUser.Name).ToListAsync().GetAwaiter()
                     .GetResult();
 
                 if (messagesDb.Any())
                 {
                     var messagesSend = messagesDb.Select(w => new Message(w.Author.Name, w.Text, w.Date)).ToArray();
-                    tcpSession.Send(JsonConvert.SerializeObject(new AllMessages(messagesSend)));
+
+                    if (command.SocketType == SocketTypeEnum.Tcp)
+                    {
+                        var tcpSession = tcpChatServer.FindSession(Guid.Parse(findUser.Session.SessionId))
+                                         ?? throw new NullReferenceException();
+                        tcpSession.Send(JsonConvert.SerializeObject(new AllMessages(messagesSend)));
+                    }
+                    else
+                    {
+                        var wsSession = wsChatServer.FindSession(Guid.Parse(findUser.Session.SessionId))
+                                        ?? throw new NullReferenceException();
+                        ((WsChatSession)wsSession).SendText(
+                            JsonConvert.SerializeObject(
+                                new AllMessages(messagesSend),
+                                new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto }));
+                    }
                 }
             }
         }

@@ -11,7 +11,7 @@
         private ICommandDispather commandDispather;
 
         public TcpChatServer(IConfiguration configuration, ICommandDispather commandDispather)
-            : base(configuration["Endpoint:Host"], int.Parse(configuration["Endpoint:Port"]))
+            : base(configuration["EndpointTcp:Host"], int.Parse(configuration["EndpointTcp:Port"]))
             => this.commandDispather = commandDispather;
 
         protected override TcpSession CreateSession()

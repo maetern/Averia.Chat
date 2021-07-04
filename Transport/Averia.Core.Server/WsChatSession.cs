@@ -1,35 +1,36 @@
-﻿namespace Averia.Transport.Server
+﻿using System;
+using System.Net.Sockets;
+using System.Text;
+using Averia.Core.Domain.Commands;
+using Averia.Core.Domain.Interfaces;
+using NetCoreServer;
+using Newtonsoft.Json;
+
+namespace Averia.Transport.Server
 {
-    using System;
-    using System.Text;
-
     using Averia.Core.Domain;
-    using Averia.Core.Domain.Commands;
-    using Averia.Core.Domain.Interfaces;
-    using NetCoreServer;
-    using Newtonsoft.Json;
 
-    internal sealed class TcpChatSession : TcpSession
+    public sealed class WsChatSession : WsSession
     {
         private readonly ICommandDispather commandDispather;
 
-        public TcpChatSession(TcpServer server, ICommandDispather commandDispather)
+        public WsChatSession(WsServer server, ICommandDispather commandDispather)
             : base(server)
             => this.commandDispather = commandDispather;
 
-        protected override void OnConnected()
+        public override void OnWsConnected(HttpRequest request)
         {
             commandDispather.Execute(new CreateSession(Id.ToString()));
-            Console.WriteLine($"Chat TCP session with Id {Id} connected!");
+            Console.WriteLine($"Chat WebSocket session with Id {Id} connected!");
         }
 
-        protected override void OnDisconnected()
+        public override void OnWsDisconnected()
         {
             commandDispather.Execute(new DeleteSession(Id.ToString()));
-            Console.WriteLine($"Chat TCP session with Id {Id} disconnected!");
+            Console.WriteLine($"Chat WebSocket session with Id {Id} disconnected!");
         }
 
-        protected override void OnReceived(byte[] buffer, long offset, long size)
+        public override void OnWsReceived(byte[] buffer, long offset, long size)
         {
             string message = Encoding.UTF8.GetString(buffer, (int)offset, (int)size);
             var clientCommand = JsonConvert.DeserializeObject<ICommand>(message);
@@ -39,7 +40,7 @@
                 case SignIn signIn:
                     var authUser = new AuthUser(signIn.UserName, Id.ToString());
                     commandDispather.Execute(authUser);
-                    commandDispather.Execute(new SendExistingMessages(Id.ToString(), SocketTypeEnum.Tcp));
+                    commandDispather.Execute(new SendExistingMessages(Id.ToString(), SocketTypeEnum.Ws));
                     break;
                 case UserMessage userMessage:
                     var addMessage = new AddMessage(userMessage.Text, Id.ToString());
@@ -50,9 +51,9 @@
             }
         }
 
-        protected override void OnError(System.Net.Sockets.SocketError error)
+        protected override void OnError(SocketError error)
         {
-            Console.WriteLine($"Chat TCP session caught an error with code {error}");
+            Console.WriteLine($"Chat WebSocket session caught an error with code {error}");
         }
     }
 }

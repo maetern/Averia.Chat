@@ -9,6 +9,8 @@ namespace Averia.Core.Domain.Server.Commands.Handlers
 
     public sealed class SessionCommandHandler : ICommandHandler<CreateSession>, ICommandHandler<DeleteSession>
     {
+        private static readonly object LockedObject = new object();
+
         private readonly ChatContext context;
 
         public SessionCommandHandler(ChatContext context) => this.context = context;
@@ -21,17 +23,20 @@ namespace Averia.Core.Domain.Server.Commands.Handlers
 
         public void Execute(DeleteSession command)
         {
-            var findUser = context.Users.FirstOrDefaultAsync(w => w.Session.SessionId == command.SessionId).GetAwaiter()
-                .GetResult();
-
-            if (findUser != null)
+            lock (LockedObject)
             {
-                findUser.Session = null;
-            }
+                var findUser = context.Users.FirstOrDefaultAsync(w => w.Session.SessionId == command.SessionId).GetAwaiter()
+                    .GetResult();
 
-            var session = context.Sessions.SingleAsync(w => w.SessionId == command.SessionId).GetAwaiter().GetResult();
-            context.Sessions.Remove(session);
-            context.SaveChangesAsync().GetAwaiter().GetResult();
+                if (findUser != null)
+                {
+                    findUser.Session = null;
+                }
+
+                var session = context.Sessions.SingleAsync(w => w.SessionId == command.SessionId).GetAwaiter().GetResult();
+                context.Sessions.Remove(session);
+                context.SaveChangesAsync().GetAwaiter().GetResult();
+            }
         }
     }
 }

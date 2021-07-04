@@ -12,11 +12,14 @@ namespace Averia.Core.Domain.Server.Commands.Handlers
     {
         private readonly TcpChatServer tcpChatServer;
 
+        private readonly WsChatServer wsChatServer;
+
         private readonly ChatContext context;
 
-        public ConsoleCommandHandler(TcpChatServer tcpChatServer, ChatContext context)
+        public ConsoleCommandHandler(TcpChatServer tcpChatServer, WsChatServer wsChatServer, ChatContext context)
         {
             this.tcpChatServer = tcpChatServer;
+            this.wsChatServer = wsChatServer;
             this.context = context;
         }
 
@@ -26,6 +29,7 @@ namespace Averia.Core.Domain.Server.Commands.Handlers
             {
                 case "exit":
                     tcpChatServer.Stop();
+                    wsChatServer.Stop();
                     break;
                 case "ls":
                     var sessions = context.Sessions.ToList();
