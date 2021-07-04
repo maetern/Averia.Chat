@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Averia.Chat.Server": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
