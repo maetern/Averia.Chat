@@ -1,8 +1,7 @@
-﻿namespace Averia.Core.Server
+﻿namespace Averia.Transport.Server
 {
     using System;
     using System.Net.Sockets;
-    using Averia.Core.Domain.Commands;
     using Averia.Core.Domain.Interfaces;
     using Microsoft.Extensions.Configuration;
     using NetCoreServer;
@@ -17,8 +16,7 @@
 
         protected override TcpSession CreateSession()
         {
-            var session = new TcpChatSession(this);
-            commandDispather.Execute(new CreateSession(session.Id.ToString()));
+            var session = new TcpChatSession(this, commandDispather);
             return session;
         }
 

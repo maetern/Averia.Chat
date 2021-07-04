@@ -5,12 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="5.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\..\Storage\Averia.Storage.Entity\Averia.Storage.Entity.csproj" />
+    <ProjectReference Include="..\..\Transport\Averia.Core.Server\Averia.Transport.Server.csproj" />
     <ProjectReference Include="..\Averia.Core.Domain\Averia.Core.Domain.csproj" />
-    <ProjectReference Include="..\Averia.Core.Server\Averia.Core.Server.csproj" />
   </ItemGroup>
 
 </Project>

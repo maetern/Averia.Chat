@@ -1,22 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using Averia.Core.Domain.Commands;
 using Averia.Core.Domain.Interfaces;
-using Averia.Core.Server;
-using Microsoft.Extensions.Caching.Memory;
+using Averia.Storage.Entity;
+using System.Linq;
 
 namespace Averia.Core.Domain.Server.Commands.Handlers
 {
-    public class ConsoleCommandHandler : ICommandHandler<ConsoleCommand>
+    using Averia.Transport.Server;
+
+    public sealed class ConsoleCommandHandler : ICommandHandler<ConsoleCommand>
     {
         private readonly TcpChatServer tcpChatServer;
 
-        private readonly IMemoryCache memoryCache;
+        private readonly ChatContext context;
 
-        public ConsoleCommandHandler(TcpChatServer tcpChatServer, IMemoryCache memoryCache)
+        public ConsoleCommandHandler(TcpChatServer tcpChatServer, ChatContext context)
         {
             this.tcpChatServer = tcpChatServer;
-            this.memoryCache = memoryCache;
+            this.context = context;
         }
 
         public void Execute(ConsoleCommand command)
@@ -27,12 +28,10 @@ namespace Averia.Core.Domain.Server.Commands.Handlers
                     tcpChatServer.Stop();
                     break;
                 case "ls":
-                    var sessions = memoryCache.Get<List<string>>(Constants.CacheSessionsKey);
-                    if (sessions != null)
-                    {
-                        foreach (var sessionId in sessions)
-                            Console.WriteLine($"{sessionId}");
-                    }
+                    var sessions = context.Sessions.ToList();
+                    if (sessions.Any())
+                        foreach (var session in sessions)
+                            Console.WriteLine($"{session.SessionId}");
                     else
                         Console.WriteLine("Sessions empty");
 

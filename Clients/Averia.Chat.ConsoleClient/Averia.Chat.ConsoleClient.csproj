@@ -13,8 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\Averia.Core.Domain.Client\Averia.Core.Domain.Client.csproj" />
     <ProjectReference Include="..\..\Core\Averia.Core.Domain\Averia.Core.Domain.csproj" />
-    <ProjectReference Include="..\..\Core\Averia.Core.TcpClient\Averia.Core.Client.csproj" />
+    <ProjectReference Include="..\..\Transport\Averia.Core.Client\Averia.Transport.Client.csproj" />
   </ItemGroup>
 
   <ItemGroup>

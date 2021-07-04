@@ -1,24 +1,37 @@
-﻿using Averia.Core.Domain.Interfaces;
-using System.Collections.Generic;
-using Averia.Core.Domain.Commands;
-using Microsoft.Extensions.Caching.Memory;
+﻿using Averia.Core.Domain.Commands;
+using Averia.Core.Domain.Interfaces;
+using Averia.Storage.Entity;
+using Averia.Storage.Entity.Models;
 
 namespace Averia.Core.Domain.Server.Commands.Handlers
 {
-    public sealed class SessionCommandHandler : ICommandHandler<CreateSession>
-    {
-        private readonly IMemoryCache memoryCache;
+    using Microsoft.EntityFrameworkCore;
 
-        public SessionCommandHandler(IMemoryCache memoryCache) => this.memoryCache = memoryCache;
+    public sealed class SessionCommandHandler : ICommandHandler<CreateSession>, ICommandHandler<DeleteSession>
+    {
+        private readonly ChatContext context;
+
+        public SessionCommandHandler(ChatContext context) => this.context = context;
 
         public void Execute(CreateSession command)
         {
-            var sessions = memoryCache.Get<List<string>>(Constants.CacheSessionsKey);
-            if (sessions == null)
-                sessions = new List<string>();
+            context.Sessions.Add(new SessionEntity() { SessionId = command.SessionId });
+            context.SaveChangesAsync().GetAwaiter().GetResult();
+        }
 
-            sessions.Add(command.SessionId);
-            memoryCache.Set(Constants.CacheSessionsKey, sessions);
+        public void Execute(DeleteSession command)
+        {
+            var findUser = context.Users.FirstOrDefaultAsync(w => w.Session.SessionId == command.SessionId).GetAwaiter()
+                .GetResult();
+
+            if (findUser != null)
+            {
+                findUser.Session = null;
+            }
+
+            var session = context.Sessions.SingleAsync(w => w.SessionId == command.SessionId).GetAwaiter().GetResult();
+            context.Sessions.Remove(session);
+            context.SaveChangesAsync().GetAwaiter().GetResult();
         }
     }
 }

@@ -2,9 +2,9 @@
 {
     using Averia.Core.Domain.Interfaces;
 
-    public sealed class CreateSession : ICommand
+    public sealed class DeleteSession : ICommand
     {
-        public CreateSession(string sessionId) => SessionId = sessionId;
+        public DeleteSession(string sessionId) => SessionId = sessionId;
 
         public string SessionId { get; private set; }
     }

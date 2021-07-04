@@ -5,11 +5,15 @@ using Averia.Core.Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using System;
-using Averia.Core.Client;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Averia.Chat.ConsoleClient
 {
+    using Averia.Core.Domain.Client.Commands.Handlers;
+    using Averia.Core.Domain.Commands;
+    using Averia.Transport.Client;
+
+    using Newtonsoft.Json;
+
     public class Program
     {
         private static IConfiguration Configuration { get; set; }
@@ -30,25 +34,27 @@ namespace Averia.Chat.ConsoleClient
                         }))
                 .Build();
 
+            ConfigureJson();
+
             var autofacRoot = host.Services.GetAutofacRoot();
             CommandDispather = autofacRoot.Resolve<ICommandDispather>();
             ChatClient = autofacRoot.Resolve<TcpChatClient>();
-            ChatClient.Connect();
+            ChatClient.ConnectAsync();
 
-            Console.ReadLine();
-
-            // Disconnect the client
-            Console.Write("Client disconnecting...");
-            ChatClient.DisconnectAndStop();
-            Console.WriteLine("Done!");
-
+            SignIn();
             WaitCommand();
+        }
+
+        private static void SignIn()
+        {
+            Console.WriteLine("Write username to sign in");
+            var userName = Console.ReadLine();
+            CommandDispather.Execute(new SignIn(userName));
         }
 
         private static void WaitCommand()
         {
-            Console.WriteLine("Write username to sign in");
-
+            Console.WriteLine("Write message to send to everyone or write $exit to disconnect");
             var waitCommand = true;
             while (waitCommand)
             {
@@ -56,7 +62,7 @@ namespace Averia.Chat.ConsoleClient
                 if (!string.IsNullOrEmpty(command))
                 {
                     CommandDispather.Execute(new ConsoleCommand(command));
-                    if (command.Equals("exit", StringComparison.CurrentCultureIgnoreCase)) waitCommand = false;
+                    if (command.Equals("$exit", StringComparison.CurrentCultureIgnoreCase)) waitCommand = false;
                 }
             }
         }
@@ -64,6 +70,9 @@ namespace Averia.Chat.ConsoleClient
         private static void ConfigureCommands(ContainerBuilder builder)
         {
             builder.RegisterType<CommandDispatcher>().As<ICommandDispather>().SingleInstance();
+
+            builder.RegisterType<ConsoleCommandHandler>().As<ICommandHandler<ConsoleCommand>>();
+            builder.RegisterType<SigInCommandHandler>().As<ICommandHandler<SignIn>>();
         }
 
         private static void ConfigureSettings(ContainerBuilder builder)
@@ -75,6 +84,14 @@ namespace Averia.Chat.ConsoleClient
         private static void ConfigureTcpChatClient(ContainerBuilder builder)
         {
             builder.RegisterType<TcpChatClient>().SingleInstance();
+        }
+
+        private static void ConfigureJson()
+        {
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings()
+                                                    {
+                                                        TypeNameHandling = TypeNameHandling.All
+                                                    };
         }
     }
 }

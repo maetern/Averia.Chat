@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Net;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Averia.Core.Domain;
 using Averia.Core.Domain.Commands;
 using Averia.Core.Domain.Interfaces;
-using Averia.Core.Server;
+
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -13,6 +12,12 @@ using Microsoft.Extensions.Hosting;
 namespace Averia.Chat.Server
 {
     using Averia.Core.Domain.Server.Commands.Handlers;
+    using Averia.Storage.Entity;
+    using Averia.Transport.Server;
+
+    using Microsoft.EntityFrameworkCore;
+
+    using Newtonsoft.Json;
 
     internal class Program
     {
@@ -28,7 +33,7 @@ namespace Averia.Chat.Server
                 .ConfigureServices(
                     serviceCollection =>
                         {
-                            serviceCollection.AddMemoryCache();
+                            serviceCollection.AddDbContext<ChatContext>(w => w.UseInMemoryDatabase("Averia.Chat"));
                         })
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory(
                     containerBuilder =>
@@ -38,6 +43,8 @@ namespace Averia.Chat.Server
                             ConfigureTcpChatServer(containerBuilder);
                         }))
                 .Build();
+
+            ConfigureJson();
 
             var autofacRoot = host.Services.GetAutofacRoot();
             CommandDispather = autofacRoot.Resolve<ICommandDispather>();
@@ -72,6 +79,11 @@ namespace Averia.Chat.Server
 
             builder.RegisterType<ConsoleCommandHandler>().As<ICommandHandler<ConsoleCommand>>();
             builder.RegisterType<SessionCommandHandler>().As<ICommandHandler<CreateSession>>();
+            builder.RegisterType<SessionCommandHandler>().As<ICommandHandler<DeleteSession>>();
+
+            builder.RegisterType<AuthCommandHandler>().As<ICommandHandler<AuthUser>>();
+            builder.RegisterType<UserMessageCommandHandler>().As<ICommandHandler<AddMessage>>();
+            builder.RegisterType<UserMessageCommandHandler>().As<ICommandHandler<SendExistingMessages>>();
         }
 
         private static void ConfigureSettings(ContainerBuilder builder)
@@ -83,6 +95,14 @@ namespace Averia.Chat.Server
         private static void ConfigureTcpChatServer(ContainerBuilder builder)
         {
             builder.RegisterType<TcpChatServer>().SingleInstance();
+        }
+
+        private static void ConfigureJson()
+        {
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings()
+                                                    {
+                                                        TypeNameHandling = TypeNameHandling.All
+                                                    };
         }
     }
 }

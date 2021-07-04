@@ -1,11 +1,13 @@
-﻿using System;
-using System.Text;
-using Averia.Core.Domain.Interfaces;
-using Microsoft.Extensions.Configuration;
-using NetCoreServer;
-
-namespace Averia.Core.Client
+﻿namespace Averia.Transport.Client
 {
+    using System;
+    using System.Text;
+    using Averia.Core.Domain.Commands;
+    using Averia.Core.Domain.Interfaces;
+    using Microsoft.Extensions.Configuration;
+    using NetCoreServer;
+    using Newtonsoft.Json;
+
     public class TcpChatClient : TcpClient
     {
         private readonly ICommandDispather commandDispather;
@@ -31,7 +33,11 @@ namespace Averia.Core.Client
 
         protected override void OnReceived(byte[] buffer, long offset, long size)
         {
-            Console.WriteLine(Encoding.UTF8.GetString(buffer, (int)offset, (int)size));
+            var data = JsonConvert.DeserializeObject<ICommand>(Encoding.UTF8.GetString(buffer, (int)offset, (int)size));
+            var sendMessages = data as AllMessages ?? throw new NullReferenceException();
+
+            foreach (var message in sendMessages.Messages) 
+                Console.WriteLine($"{message.Date.ToShortTimeString()} {message.Author}: {message.Text}");
         }
 
         protected override void OnError(System.Net.Sockets.SocketError error)

@@ -8,6 +8,7 @@
   <ItemGroup>
     <PackageReference Include="Autofac" Version="6.2.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.7" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
@@ -17,7 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Core\Averia.Core.Domain.Server\Averia.Core.Domain.Server.csproj" />
     <ProjectReference Include="..\..\Core\Averia.Core.Domain\Averia.Core.Domain.csproj" />
-    <ProjectReference Include="..\..\Core\Averia.Core.Server\Averia.Core.Server.csproj" />
+    <ProjectReference Include="..\..\Storage\Averia.Storage.Entity\Averia.Storage.Entity.csproj" />
   </ItemGroup>
 
   <ItemGroup>
